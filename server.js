@@ -14,7 +14,11 @@ app.use(express.static('public'));
 
 const upload = multer({ dest: 'uploads/' });
 
-const OLLAMA_URL = 'http://localhost:11434/api/generate';
+const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434/api/generate';
+const PUBLIC_BASE_URL = process.env.PUBLIC_BASE_URL || 'http://localhost:3002';
+const IS_RENDER = !!process.env.RENDER || !!process.env.RENDER_EXTERNAL_URL;
+const OLLAMA_DISABLED = process.env.OLLAMA_DISABLED === 'true';
+const OLLAMA_ENABLED = !IS_RENDER && !OLLAMA_DISABLED;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 const GEMINI_MODEL = 'gemini-1.5-flash';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
@@ -133,6 +137,10 @@ function buildCompetitorNews() {
 
 // ─── CALL OLLAMA ───────────────────────────────────────────────────────────
 async function callOllama(prompt) {
+  if (!OLLAMA_ENABLED) {
+    throw new Error('Ollama is not available in hosted environments');
+  }
+
   try {
     const res = await axios.post(OLLAMA_URL, {
       model: 'gemma:2b',
@@ -144,11 +152,19 @@ async function callOllama(prompt) {
     return res.data.response.trim();
   } catch (err) {
     console.error('Ollama error:', err.message);
-    throw new Error('Failed to generate content with Ollama');
+    throw new Error(`Failed to generate content with Ollama: ${err.message}`);
   }
 }
 
 // ─── CALL GEMINI ───────────────────────────────────────────────────────────
+function formatProviderError(err) {
+  if (err?.response?.status) {
+    const data = err.response?.data;
+    return `HTTP ${err.response.status}: ${JSON.stringify(data)}`;
+  }
+  return err?.message || 'Unknown error';
+}
+
 async function callGemini(prompt) {
   if (!GEMINI_API_KEY) {
     throw new Error('Gemini API key not configured');
@@ -182,8 +198,9 @@ async function callGemini(prompt) {
     }
     throw new Error('No response from Gemini');
   } catch (err) {
-    console.error('Gemini error:', err.message);
-    throw new Error('Failed to generate content with Gemini');
+    const details = formatProviderError(err);
+    console.error('Gemini error:', details);
+    throw new Error(`Failed to generate content with Gemini: ${details}`);
   }
 }
 
@@ -210,7 +227,7 @@ async function callOpenRouter(prompt) {
       {
         headers: {
           'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-          'HTTP-Referer': 'http://localhost:3002',
+          'HTTP-Referer': PUBLIC_BASE_URL,
           'X-Title': 'Hook Generator'
         },
         timeout: 60000
@@ -222,8 +239,9 @@ async function callOpenRouter(prompt) {
     }
     throw new Error('No response from OpenRouter');
   } catch (err) {
-    console.error('OpenRouter error:', err.message);
-    throw new Error('Failed to generate content with OpenRouter');
+    const details = formatProviderError(err);
+    console.error('OpenRouter error:', details);
+    throw new Error(`Failed to generate content with OpenRouter: ${details}`);
   }
 }
 
@@ -261,8 +279,9 @@ async function callGroq(prompt) {
     }
     throw new Error('No response from Groq');
   } catch (err) {
-    console.error('Groq error:', err.message);
-    throw new Error('Failed to generate content with Groq');
+    const details = formatProviderError(err);
+    console.error('Groq error:', details);
+    throw new Error(`Failed to generate content with Groq: ${details}`);
   }
 }
 
@@ -279,13 +298,16 @@ async function generateContent(prompt, model = 'ollama') {
     // Default to Ollama
     return await callOllama(prompt);
   } catch (err) {
-    // Fallback to Ollama if API fails
-    console.error(`[${model.toUpperCase()}] Generation failed, falling back to Ollama...`);
-    try {
-      return await callOllama(prompt);
-    } catch (ollamaErr) {
-      throw new Error(`All models failed. Last error: ${err.message}`);
+    const canFallback = model !== 'ollama' && OLLAMA_ENABLED;
+    if (canFallback) {
+      console.error(`[${model.toUpperCase()}] Generation failed, falling back to Ollama...`);
+      try {
+        return await callOllama(prompt);
+      } catch (ollamaErr) {
+        throw new Error(`All models failed. Last error: ${err.message}`);
+      }
     }
+    throw new Error(err.message || 'Model generation failed');
   }
 }
 
