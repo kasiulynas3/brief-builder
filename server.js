@@ -20,7 +20,7 @@ const IS_RENDER = !!process.env.RENDER || !!process.env.RENDER_EXTERNAL_URL;
 const OLLAMA_DISABLED = process.env.OLLAMA_DISABLED === 'true';
 const OLLAMA_ENABLED = !IS_RENDER && !OLLAMA_DISABLED;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
-const GEMINI_MODEL = 'gemini-1.5-flash';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-1.5-flash-latest';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
 const OPENROUTER_MODEL = 'meta-llama/llama-2-70b-chat';
 const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
@@ -172,7 +172,7 @@ async function callGemini(prompt) {
 
   try {
     const res = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
       {
         contents: [
           {
