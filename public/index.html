@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hook Generator - Modern</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8f9fa;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2563eb;
+    }
+
+    .logo span {
+      color: #1f2937;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn:hover {
+      background: #f3f4f6;
+      border-color: #9ca3af;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      padding: 32px;
+      margin-bottom: 32px;
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      border-color: #bfdbfe;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+    }
+
+    .card h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Form elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #2563eb;
+      ring: 2px;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* Model selector */
+    .model-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .model-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .model-option input[type="radio"] {
+      cursor: pointer;
+      width: 16px;
+      height: 16px;
+    }
+
+    .model-option label {
+      margin: 0;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* Grid layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* Result items */
+    .result-item {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+
+    .result-item:hover {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+    }
+
+    .result-text {
+      flex: 1;
+    }
+
+    .result-text-main {
+      font-weight: 500;
+      color: #1f2937;
+      margin-bottom: 6px;
+    }
+
+    .result-text-sub {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+    }
+
+    .result-actions button {
+      padding: 6px 12px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    /* Selection buttons */
+    .selection-btn {
+      background: #f0f4ff;
+      border: 2px solid #2563eb;
+      color: #2563eb;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+      text-align: left;
+    }
+
+    .selection-btn:hover {
+      background: #2563eb;
+      color: white;
+    }
+
+    .selection-btn.active {
+      background: #2563eb;
+      color: white;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    /* Status message */
+    #statusMessage {
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      background: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      border-left: 4px solid #2563eb;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      max-width: 600px;
+      animation: slideDown 0.3s ease;
+      display: none;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #statusMessage.success {
+      border-left-color: #10b981;
+      background: #f0fdf4;
+    }
+
+    #statusMessage.error {
+      border-left-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: #1f2937;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      justify-content: flex-end;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .container {
+        padding: 20px 16px;
+      }
+
+      .card {
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .model-selector {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #e5e7eb;
+      border-top-color: #2563eb;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <div class="logo">Hook<span>Gen</span></div>
+      <div class="header-actions">
+        <button class="btn" onclick="viewHistory()">📚 History</button>
+        <button class="btn" onclick="window.location.reload()">🔄 Refresh</button>
+        <button class="btn" onclick="startNew()">📋 New Project</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Product Info Card -->
+    <div class="card">
+      <h2>📦 Your Product</h2>
+      <div class="form-group">
+        <label>Product Name *</label>
+        <input type="text" id="productName" placeholder="e.g., GutHealth Pro, Energy Boost...">
+      </div>
+      <div class="form-group">
+        <label>Product Context & Benefits *</label>
+        <textarea id="productContext" placeholder="Describe your product, key benefits, target audience, unique selling points..."></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Select AI Model for Angles</label>
+        <div class="model-selector" id="anglesModelSelector">
+          <div class="model-option">
+            <input type="radio" id="anglesOllama" name="anglesModel" value="ollama" checked>
+            <label for="anglesOllama">Ollama (Local)</label>
+          </div>
+          <div class="model-option">
+            <input type="radio" id="anglesGemini" name="anglesModel" value="gemini">
+            <label for="anglesGemini">Gemini</label>
+          </div>
+          <div class="model-option">
+            <input type="radio" id="anglesOpenrouter" name="anglesModel" value="openrouter">
+            <label for="anglesOpenrouter">OpenRouter</label>
+          </div>
+          <div class="model-option">
+            <input type="radio" id="anglesGroq" name="anglesModel" value="groq">
+            <label for="anglesGroq">Groq</label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Add custom context for angles (optional)</label>
+        <textarea id="productCustomContext" placeholder="Any specific angle direction, themes to explore, or focus areas..."></textarea>
+      </div>
+      
+      <button class="btn btn-primary" onclick="generateAngles()" style="width: auto;">
+        Generate 3 Angles
+      </button>
+    </div>
+
+    <!-- Angles Section -->
+    <div class="card" id="anglesCard" style="display: none;">
+      <h2>✨ Choose Your Angle</h2>
+      
+      <button class="btn" onclick="regenerateAngles()" style="margin-bottom: 16px; background: #10b981;">
+        🔄 Regenerate Angles
+      </button>
+
+      <div id="anglesList" class="grid-3"></div>
+    </div>
+
+    <!-- Hooks Section -->
+    <div class="card" id="hooksCard" style="display: none;">
+      <h2>🎯 Creative Hooks</h2>
+      
+      <div class="form-group">
+        <label>Selected Angle: <span class="badge" id="selectedAngleBadge"></span></label>
+      </div>
+      
+      <div class="form-group">
+        <label>Select Model for Hooks</label>
+        <div class="model-selector" id="hooksModelSelector">
+          <div class="model-option">
+            <input type="radio" id="hooksOllama" name="hooksModel" value="ollama" checked>
+            <label for="hooksOllama">🤖 Ollama</label>
+          </div>
+          <div class="model-option">
+            <input type="radio" id="hooksGemini" name="hooksModel" value="gemini">
+            <label for="hooksGemini">✨ Gemini</label>
+          </div>
+          <div class="model-option">
+            <input type="radio" id="hooksOpenRouter" name="hooksModel" value="openrouter">
+            <label for="hooksOpenRouter">🚀 OpenRouter</label>
+          </div>
+          <div class="model-option">
+            <input type="radio" id="hooksGroq" name="hooksModel" value="groq">
+            <label for="hooksGroq">⚡ Groq</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Add custom context (optional)</label>
+        <textarea id="anglesCustomContext" placeholder="Any additional context to consider for hooks..."></textarea>
+      </div>
+      
+      <button class="btn btn-primary" onclick="generateHooks()" style="margin-bottom: 20px; width: auto;">
+        Generate Hooks
+      </button>
+
+      <div class="form-group">
+        <label>Select Model for Whisk Prompts</label>
+        <div class="model-selector" id="whiskModelSelector">
+          <div class="model-option">
+            <input type="radio" id="whiskOllama" name="whiskModel" value="ollama" checked>
+            <label for="whiskOllama">🤖 Ollama</label>
+          </div>
+          <div class="model-option">
+            <input type="radio" id="whiskGemini" name="whiskModel" value="gemini">
+            <label for="whiskGemini">✨ Gemini</label>
+          </div>
+          <div class="model-option">
+            <input type="radio" id="whiskOpenRouter" name="whiskModel" value="openrouter">
+            <label for="whiskOpenRouter">🚀 OpenRouter</label>
+          </div>
+          <div class="model-option">
+            <input type="radio" id="whiskGroq" name="whiskModel" value="groq">
+            <label for="whiskGroq">⚡ Groq</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Add custom context (optional)</label>
+        <textarea id="hooksCustomContext" placeholder="Any additional context for whisk prompts..."></textarea>
+      </div>
+
+      <div id="hooksList" class="grid-2"></div>
+      
+      <button class="btn btn-primary" id="generateWhiskBtn" onclick="generateWhiskPrompts()" style="margin-top: 20px; width: auto; display: none;">
+        Generate Visual Prompts
+      </button>
+    </div>
+
+    <!-- Whisk Prompts Section -->
+    <div class="card" id="whiskCard" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="margin: 0;">🎨 Visual Prompts</h2>
+        <button class="btn btn-primary" onclick="window.open('https://labs.google/fx/tools/whisk/project', 'whisk', 'width=1200,height=800,scrollbars=yes,resizable=yes,toolbar=no,menubar=no,location=yes')" style="padding: 10px 20px;">
+          🚀 Open in Whisk
+        </button>
+      </div>
+      
+      <div class="form-group">
+        <label>Selected Hook: <span class="badge badge-success" id="selectedHookBadge"></span></label>
+      </div>
+
+      <div id="whiskPrompts" class="grid-3"></div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Status Message -->
+  <div id="statusMessage"></div>
+
+  <script>
+    // Global state
+    const state = {
+      productName: '',
+      productContext: '',
+      angles: [],
+      selectedAngle: '',
+      selectedAngleIdx: -1,
+      hooks: [],
+      selectedHook: '',
+      selectedHookIdx: -1,
+      whiskPrompts: {}
+    };
+
+    // History management
+    function saveToHistory() {
+      if (!state.productName) return;
+      
+      const history = JSON.parse(localStorage.getItem('hookGenHistory') || '[]');
+      const timestamp = new Date().toISOString();
+      
+      const entry = {
+        id: Date.now(),
+        timestamp,
+        productName: state.productName,
+        productContext: state.productContext,
+        selectedAngle: state.selectedAngle,
+        selectedHook: state.selectedHook,
+        whiskPrompts: state.whiskPrompts
+      };
+      
+      history.unshift(entry);
+      if (history.length > 50) history.pop(); // Keep last 50
+      localStorage.setItem('hookGenHistory', JSON.stringify(history));
+    }
+
+    function viewHistory() {
+      const history = JSON.parse(localStorage.getItem('hookGenHistory') || '[]');
+      
+      if (history.length === 0) {
+        showStatus('📚 No history yet', 'info');
+        return;
+      }
+
+      let html = '<h2>📚 Project History</h2>';
+      html += '<div style="max-height: 60vh; overflow-y: auto;">';
+      
+      history.forEach((entry, idx) => {
+        const date = new Date(entry.timestamp);
+        const dateStr = date.toLocaleString();
+        
+        html += `
+          <div class="result-item" style="margin-bottom: 12px; cursor: pointer; border: 2px solid transparent; transition: border 0.2s;" 
+               onmouseover="this.style.borderColor='#2563eb'" 
+               onmouseout="this.style.borderColor='transparent'"
+               onclick="loadFromHistory(${entry.id})">
+            <strong>${entry.productName}</strong>
+            <div style="font-size: 13px; color: #6b7280; margin-top: 4px;">${dateStr}</div>
+            ${entry.selectedAngle ? `<div style="font-size: 13px; margin-top: 4px;">📐 ${entry.selectedAngle}</div>` : ''}
+            ${entry.selectedHook ? `<div style="font-size: 13px; margin-top: 4px;">🎯 ${entry.selectedHook}</div>` : ''}
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      html += `<button class="btn" onclick="clearHistory()" style="margin-top: 16px; background: #dc2626;">Clear All History</button>`;
+      html += `<button class="btn" onclick="closeModal()" style="margin-top: 16px; margin-left: 8px;">Close</button>`;
+      
+      document.getElementById('modalBody').innerHTML = html;
+      document.getElementById('modal').classList.add('active');
+    }
+
+    function loadFromHistory(id) {
+      const history = JSON.parse(localStorage.getItem('hookGenHistory') || '[]');
+      const entry = history.find(e => e.id === id);
+      
+      if (!entry) return;
+      
+      state.productName = entry.productName;
+      state.productContext = entry.productContext;
+      state.selectedAngle = entry.selectedAngle || '';
+      state.selectedHook = entry.selectedHook || '';
+      state.whiskPrompts = entry.whiskPrompts || {};
+      
+      document.getElementById('productName').value = entry.productName;
+      document.getElementById('productContext').value = entry.productContext;
+      
+      if (entry.whiskPrompts && Object.keys(entry.whiskPrompts).length > 0) {
+        document.getElementById('whiskCard').style.display = 'block';
+        renderWhiskPrompts();
+      }
+      
+      closeModal();
+      showStatus('✅ Project loaded from history', 'success');
+    }
+
+    function clearHistory() {
+      if (confirm('Clear all history? This cannot be undone.')) {
+        localStorage.removeItem('hookGenHistory');
+        closeModal();
+        showStatus('🗑️ History cleared', 'info');
+      }
+    }
+
+    // Status message
+    function showStatus(msg, type = 'info') {
+      const el = document.getElementById('statusMessage');
+      el.textContent = msg;
+      el.className = type;
+      el.style.display = 'flex';
+      if (type !== 'loading') {
+        setTimeout(() => el.style.display = 'none', 3000);
+      }
+    }
+
+    // Generate angles
+    async function generateAngles() {
+      const productName = document.getElementById('productName').value.trim();
+      const productContext = document.getElementById('productContext').value.trim();
+
+      if (!productName || !productContext) {
+        showStatus('⚠️ Please fill in both fields', 'error');
+        return;
+      }
+
+      state.productName = productName;
+      state.productContext = productContext;
+
+      const selectedModel = document.querySelector('input[name="anglesModel"]:checked')?.value || 'ollama';
+      const customContext = document.getElementById('productCustomContext')?.value.trim() || '';
+      showStatus('🔄 Generating angles with ' + selectedModel + '...', 'loading');
+
+      try {
+        const res = await fetch('/api/generate-angles', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productName, productContext, customContext, model: selectedModel })
+        });
+
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({ error: 'Server error' }));
+          throw new Error(errorData.error || 'Failed to generate angles');
+        }
+        
+        const data = await res.json();
+        
+        if (!data.angles || data.angles.length === 0) {
+          throw new Error('No angles were generated. Please try again.');
+        }
+        
+        state.angles = data.angles;
+
+        document.getElementById('anglesCard').style.display = 'block';
+        renderAngles();
+        document.getElementById('anglesCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        saveToHistory();
+        showStatus('✅ Angles generated!', 'success');
+      } catch (err) {
+        console.error('Generate angles error:', err);
+        showStatus('❌ ' + err.message, 'error');
+      }
+    }
+
+    // Regenerate angles
+    async function regenerateAngles() {
+      if (!state.productName || !state.productContext) {
+        showStatus('⚠️ Please fill in product info first', 'error');
+        return;
+      }
+
+      const selectedModel = document.querySelector('input[name="anglesModel"]:checked')?.value || 'ollama';
+      const customContext = document.getElementById('productCustomContext')?.value.trim() || '';
+      showStatus('🔄 Regenerating angles with ' + selectedModel + '...', 'loading');
+
+      try {
+        const res = await fetch('/api/generate-angles', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            productName: state.productName, 
+            productContext: state.productContext, 
+            customContext,
+            model: selectedModel 
+          })
+        });
+
+        if (!res.ok) throw new Error('Failed to regenerate angles');
+        const data = await res.json();
+        state.angles = data.angles;
+        
+        // Reset selections since angles changed
+        state.selectedAngle = '';
+        state.selectedAngleIdx = -1;
+        state.hooks = [];
+        state.selectedHook = '';
+        state.selectedHookIdx = -1;
+        state.whiskPrompts = {};
+        
+        document.getElementById('hooksCard').style.display = 'none';
+        document.getElementById('whiskCard').style.display = 'none';
+
+        renderAngles();
+        saveToHistory();
+        showStatus('✅ Angles regenerated!', 'success');
+      } catch (err) {
+        showStatus('❌ ' + err.message, 'error');
+      }
+    }
+
+    // Render angles
+    function renderAngles() {
+      const container = document.getElementById('anglesList');
+      container.innerHTML = state.angles.map((angle, idx) => {
+        const safeAngle = String(angle || '').replace(/'/g, "\\'");
+        return `<button class="selection-btn ${state.selectedAngleIdx === idx ? 'active' : ''}" onclick="selectAngle(${idx}, '${safeAngle}')">${angle}</button>`;
+      }).join('');
+    }
+
+    // Select angle
+    async function selectAngle(idx, angle) {
+      state.selectedAngle = angle;
+      state.selectedAngleIdx = idx;
+      state.hooks = [];
+      state.selectedHook = '';
+
+      renderAngles();
+      document.getElementById('selectedAngleBadge').textContent = angle;
+      document.getElementById('hooksCard').style.display = 'block';
+      document.getElementById('hooksCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      showStatus('📍 Angle selected. Choose model and click Generate Hooks.', 'info');
+    }
+
+    // Generate hooks
+    async function generateHooks() {
+      if (!state.selectedAngle || !state.productName) {
+        showStatus('⚠️ Please select an angle first', 'error');
+        return;
+      }
+
+      const model = document.querySelector('input[name="hooksModel"]:checked').value;
+      const customContext = document.getElementById('anglesCustomContext').value.trim();
+
+      showStatus('🎯 Generating hooks...', 'loading');
+
+      try {
+        const res = await fetch('/api/generate-hooks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            productName: state.productName,
+            productContext: state.productContext,
+            angle: state.selectedAngle,
+            customContext,
+            model
+          })
+        });
+
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({ error: 'Server error' }));
+          throw new Error(errorData.error || 'Failed to generate hooks');
+        }
+        
+        const data = await res.json();
+        
+        if (!data.hooks || data.hooks.length === 0) {
+          throw new Error('No hooks were generated. Please try again.');
+        }
+        
+        // Backend now returns hooks with main and supporting already
+        state.hooks = data.hooks;
+
+        document.getElementById('hooksCard').style.display = 'block';
+        renderHooks();
+        saveToHistory();
+        showStatus('✅ Hooks generated with supporting sentences!', 'success');
+      } catch (err) {
+        console.error('Generate hooks error:', err);
+        showStatus('❌ ' + err.message, 'error');
+      }
+    }
+
+    // Render hooks
+    function renderHooks() {
+      const container = document.getElementById('hooksList');
+      container.innerHTML = state.hooks.map((hook, idx) => `
+        <div class="result-item">
+          <div class="result-text">
+            <div class="result-text-main">${hook.main}</div>
+            <div class="result-text-sub">${hook.supporting || 'No supporting sentence yet'}</div>
+          </div>
+          <div class="result-actions">
+            <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="selectHook(${idx}, '${hook.main.replace(/'/g, "\\'")}')">Use</button>
+            <button class="btn" style="padding: 6px 12px; font-size: 12px;" onclick="editHook(${idx})">Edit</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Select hook
+    async function selectHook(idx, hook) {
+      state.selectedHook = hook;
+      state.selectedHookIdx = idx;
+      state.whiskPrompts = {};
+
+      document.getElementById('selectedHookBadge').textContent = hook;
+      document.getElementById('whiskCard').style.display = 'block';
+      document.getElementById('generateWhiskBtn').style.display = 'block';
+      document.getElementById('whiskCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      showStatus('📍 Hook selected. Choose model and click Generate Visual Prompts.', 'info');
+    }
+
+    // Generate whisk prompts
+    async function generateWhiskPrompts() {
+      if (!state.selectedHook || !state.selectedAngle) {
+        showStatus('⚠️ Please select a hook first', 'error');
+        return;
+      }
+
+      const model = document.querySelector('input[name="whiskModel"]:checked').value;
+      const customContext = document.getElementById('hooksCustomContext').value.trim();
+
+      showStatus('🎨 Generating visual prompts...', 'loading');
+
+      try {
+        const res = await fetch('/api/generate-whisk-prompts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            angle: state.selectedAngle,
+            hook: state.selectedHook,
+            productName: state.productName,
+            productContext: state.productContext,
+            customContext,
+            model
+          })
+        });
+
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({ error: 'Server error' }));
+          throw new Error(errorData.error || 'Failed to generate visual prompts');
+        }
+        
+        const data = await res.json();
+        
+        if (!data || (!data.surreal && !data.outOfBox && !data.basic)) {
+          throw new Error('No visual prompts were generated. Please try again.');
+        }
+        
+        state.whiskPrompts = data;
+
+        document.getElementById('whiskCard').style.display = 'block';
+        renderWhiskPrompts();
+        document.getElementById('whiskCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        saveToHistory();
+        showStatus('✅ Visual prompts ready!', 'success');
+      } catch (err) {
+        console.error('Generate whisk prompts error:', err);
+        showStatus('❌ ' + err.message, 'error');
+      }
+    }
+
+    // Render whisk prompts
+    function renderWhiskPrompts() {
+      const container = document.getElementById('whiskPrompts');
+      container.innerHTML = `
+        <div class="result-item" style="display: flex; flex-direction: column; align-items: stretch;">
+          <div class="result-text" style="flex: 1; margin-bottom: 12px;">
+            <div class="result-text-main" style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">🌀 SURREAL</div>
+            <div class="result-text-sub" style="white-space: pre-wrap; line-height: 1.6;">${state.whiskPrompts.surreal || 'Generating...'}</div>
+          </div>
+          <button class="btn btn-primary" style="padding: 10px 20px; font-size: 14px; width: 100%;" onclick="copyPrompt('surreal')">📋 Copy Prompt</button>
+        </div>
+        <div class="result-item" style="display: flex; flex-direction: column; align-items: stretch;">
+          <div class="result-text" style="flex: 1; margin-bottom: 12px;">
+            <div class="result-text-main" style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">💡 OUT-OF-BOX</div>
+            <div class="result-text-sub" style="white-space: pre-wrap; line-height: 1.6;">${state.whiskPrompts.outOfBox || 'Generating...'}</div>
+          </div>
+          <button class="btn btn-primary" style="padding: 10px 20px; font-size: 14px; width: 100%;" onclick="copyPrompt('outOfBox')">📋 Copy Prompt</button>
+        </div>
+        <div class="result-item" style="display: flex; flex-direction: column; align-items: stretch;">
+          <div class="result-text" style="flex: 1; margin-bottom: 12px;">
+            <div class="result-text-main" style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">📝 PROFESSIONAL</div>
+            <div class="result-text-sub" style="white-space: pre-wrap; line-height: 1.6;">${state.whiskPrompts.basic || 'Generating...'}</div>
+          </div>
+          <button class="btn btn-primary" style="padding: 10px 20px; font-size: 14px; width: 100%;" onclick="copyPrompt('basic')">📋 Copy Prompt</button>
+        </div>
+      `;
+    }
+
+    // Copy prompt
+    function copyPrompt(style) {
+      const text = state.whiskPrompts[style === 'surreal' ? 'surreal' : style === 'outOfBox' ? 'outOfBox' : 'basic'];
+      navigator.clipboard.writeText(text);
+      showStatus('✅ Copied!', 'success');
+    }
+
+    // Edit hook
+    function editHook(idx) {
+      const hook = state.hooks[idx];
+      const modalBody = document.getElementById('modalBody');
+      modalBody.innerHTML = `
+        <div class="modal-header">Edit Hook ${idx + 1}</div>
+        <div class="form-group">
+          <label>Main Hook</label>
+          <input type="text" id="editHookMain" value="${hook.main}">
+        </div>
+        <div class="form-group">
+          <label>Supporting Sentence</label>
+          <textarea id="editHookSupporting">${hook.supporting}</textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn" onclick="document.getElementById('modal').classList.remove('active')">Cancel</button>
+          <button class="btn btn-primary" onclick="saveHookEdit(${idx})">Save</button>
+        </div>
+      `;
+      document.getElementById('modal').classList.add('active');
+    }
+
+    // Save hook edit
+    function saveHookEdit(idx) {
+      state.hooks[idx].main = document.getElementById('editHookMain').value;
+      state.hooks[idx].supporting = document.getElementById('editHookSupporting').value;
+      renderHooks();
+      document.getElementById('modal').classList.remove('active');
+      showStatus('✅ Hook updated!', 'success');
+    }
+
+    // Edit angle
+    function editAngle(idx) {
+      const angle = state.angles[idx];
+      const modalBody = document.getElementById('modalBody');
+      modalBody.innerHTML = `
+        <div class="modal-header">Edit Angle ${idx + 1}</div>
+        <div class="form-group">
+          <label>Angle</label>
+          <textarea id="editAngleText">${angle}</textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn" onclick="document.getElementById('modal').classList.remove('active')">Cancel</button>
+          <button class="btn btn-primary" onclick="saveAngleEdit(${idx})">Save</button>
+        </div>
+      `;
+      document.getElementById('modal').classList.add('active');
+    }
+
+    // Save angle edit
+    function saveAngleEdit(idx) {
+      state.angles[idx] = document.getElementById('editAngleText').value;
+      renderAngles();
+      document.getElementById('modal').classList.remove('active');
+      showStatus('✅ Angle updated!', 'success');
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+    }
+
+    // Start new
+    function startNew() {
+      if (confirm('Start a new project?')) {
+        state.productName = '';
+        state.productContext = '';
+        state.angles = [];
+        state.hooks = [];
+        state.whiskPrompts = {};
+        
+        document.getElementById('productName').value = '';
+        document.getElementById('productContext').value = '';
+        document.getElementById('anglesCard').style.display = 'none';
+        document.getElementById('hooksCard').style.display = 'none';
+        document.getElementById('whiskCard').style.display = 'none';
+        document.getElementById('generateWhiskBtn').style.display = 'none';
+        
+        window.scrollTo(0, 0);
+      }
+    }
+
+    // Close modal on background click
+    document.getElementById('modal')?.addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+node_modules/
+uploads/
+.env
+.DS_Store
+*.log
+.playwright-profile/
+.puppeteer-profile/
+.stealth-profile/
+data/

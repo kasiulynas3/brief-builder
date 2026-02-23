@@ -1,0 +1,70 @@
+════════════════════════════════════════════════════════════════
+🚀 EXTRACTION RUNNING WITH SLEEP PROTECTION
+════════════════════════════════════════════════════════════════
+
+✅ CONFIRMED RUNNING:
+   • Extraction Process: caffeinate -i (PREVENTS SLEEP)
+   • API Server: localhost:3002
+   • Watchdog Monitor: Auto-restarts with caffeinate
+
+📊 CURRENT STATUS:
+   • Started: 2:14 AM (Feb 23, 2026)
+   • Completed: 20/497 ads (4%)
+   • Speed: ~10 seconds per ad
+   • ETA: ~3:30-4:00 AM completion
+
+🔄 WHAT'S HAPPENING:
+   1. Opening each Facebook Ad Library URL in Chrome
+   2. Extracting red-box ad creative text
+   3. Sending text to ollama for analysis (hooks/angles/themes)
+   4. Saving extracted + analyzed data
+
+════════════════════════════════════════════════════════════════
+⏰ WHEN YOU WAKE UP, RUN:
+════════════════════════════════════════════════════════════════
+
+   # Quick status check:
+   ./status-check.sh
+
+   # View live progress (if still running):
+   tail -f /tmp/extraction-full.log
+
+   # See extracted data:
+   jq '.[0:3]' data/facebook-ads-analyzed.json
+
+   # Test the API:
+   curl http://localhost:3002/api/competitor-news | jq '.hookMapping | keys | .[0:5]'
+
+════════════════════════════════════════════════════════════════
+🛡️ SAFETY FEATURES:
+════════════════════════════════════════════════════════════════
+
+   • ☕ caffeinate -i: PREVENTS MAC FROM SLEEPING
+   • Watchdog monitoring every 60 seconds
+   • Auto-restart if extraction crashes (with caffeinate)
+   • Auto-restart if server crashes
+   • Checkpoints every 20 ads (no data loss)
+   • Page recycling every 15 ads (memory management)
+   • 800ms pause between ads (safe extraction)
+
+════════════════════════════════════════════════════════════════
+📋 FINAL NOTES:
+════════════════════════════════════════════════════════════════
+
+   All 497 ads from 4 competitors being processed:
+   • Lemme: 68 ads
+   • Pendulum Life: 69 ads
+   • Triquetra Health: 190 ads
+   • Rosabella: 170 ads
+
+   Analysis includes:
+   ✓ Extracted ad text (from red box)
+   ✓ Ollama-generated hooks
+   ✓ Ollama-generated angles
+   ✓ Ollama-generated themes
+   ✓ Compliance patterns
+   ✓ Target audience analysis
+
+════════════════════════════════════════════════════════════════
+💤 Sleep well! Everything is under control.
+════════════════════════════════════════════════════════════════
